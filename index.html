@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8' />
+		<meta name='viewport' content='width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no'>
+		<title>jssdk</title>
+		<script type="text/javascript" src="js/jquery.min.js" ></script>
+		<script type="text/javascript" src="js/webchatJSSDKConfig.js" ></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+	</head>
+	<body>
+		<input id="text"/>
+		<button id="scan">scan</button>
+		<script>
+			$(document).ready(function(){
+				$.webchatConfig.checkWXBrowser({
+					default:true,
+					sucFunction:function(){
+						$.webchatConfig.signInformation({
+							signSuccess:function(res){
+								$("#scan").on("click",function(){
+									wx.scanQRCode({
+										needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+										scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+										success: function (res){
+											$("#text").val(res.resultStr);
+										}
+									})
+								})
+							},
+							signError:function(res){
+								console.log(res);
+								$("#text").val(res);
+							}
+						})
+					},
+					errFunction:function(){
+						alert("no wxbrowser")
+					}
+				})
+			})
+		</script>
+	</body>
+</html>
